@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>4.0.3</version>
+		<relativePath/> <!-- lookup parent from repository -->
+	</parent>
+	<groupId>com.lr</groupId>
+	<artifactId>entos-be</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<name>entos-be</name>
+	<packaging>pom</packaging>
+	<description>Coffee Road Map for Coffee Lovers</description>
+	<properties>
+		<java.version>21</java.version>
+		<entos.version>0.0.1-SNAPSHOT</entos.version>
+		<spring-modulith.version>1.3.1</spring-modulith.version>
+		<springdoc.version>2.8.3</springdoc.version>
+		<logstash-encoder.version>8.0</logstash-encoder.version>
+	</properties>
+	<modules>
+		<module>entos-api</module>
+		<module>entos-identity</module>
+		<module>entos-cafe</module>
+		<module>entos-social</module>
+		<module>entos-platform</module>
+		<module>entos-shared</module>
+		<module>entos-infra</module>
+	</modules>
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.springframework.modulith</groupId>
+				<artifactId>spring-modulith-bom</artifactId>
+				<version>${spring-modulith.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+
+			<dependency>
+				<groupId>com.lr</groupId>
+				<artifactId>entos-shared</artifactId>
+				<version>${entos.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.lr</groupId>
+				<artifactId>entos-infra</artifactId>
+				<version>${entos.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.lr</groupId>
+				<artifactId>entos-platform</artifactId>
+				<version>${entos.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.lr</groupId>
+				<artifactId>entos-identity</artifactId>
+				<version>${entos.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.lr</groupId>
+				<artifactId>entos-cafe</artifactId>
+				<version>${entos.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.lr</groupId>
+				<artifactId>entos-social</artifactId>
+				<version>${entos.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>com.cloudinary</groupId>
+				<artifactId>cloudinary-http44</artifactId>
+				<version>1.36.0</version>
+			</dependency>
+			<dependency>
+				<groupId>net.logstash.logback</groupId>
+				<artifactId>logstash-logback-encoder</artifactId>
+				<version>${logstash-encoder.version}</version>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+	<dependencies>
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<optional>true</optional>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>
+					<skip>true</skip>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+</project>
