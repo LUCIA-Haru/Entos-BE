@@ -8,4 +8,23 @@
         <version>0.0.1-SNAPSHOT</version>
     </parent>
     <artifactId>entos-identity</artifactId>
+    <dependencies>
+        <dependency>
+            <groupId>com.lr</groupId>
+            <artifactId>entos-shared</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.lr</groupId>
+            <artifactId>entos-infra</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+
+    </dependencies>
 </project>

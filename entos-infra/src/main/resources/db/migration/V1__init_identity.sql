@@ -1,0 +1,38 @@
+-- Postgres specific schema
+CREATE TABLE roles (
+    id SERIAL PRIMARY KEY,
+    guid UUID UNIQUE NOT NULL,
+    name VARCHAR(50) NOT NULL UNIQUE,
+    active BOOLEAN DEFAULT TRUE,
+    type VARCHAR(50) NOT NULL,
+    description VARCHAR(100),
+    created_at TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    created_by VARCHAR(100),
+    updated_by VARCHAR(100),
+    version BIGINT DEFAULT 0
+);
+
+CREATE TABLE users (
+    id SERIAL PRIMARY KEY,
+    guid UUID UNIQUE NOT NULL,
+    username VARCHAR(100) NOT NULL UNIQUE,
+    email VARCHAR(255) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    created_by VARCHAR(100),
+    updated_by VARCHAR(100),
+    version BIGINT DEFAULT 0
+);
+
+CREATE TABLE user_roles (
+    user_id BIGINT NOT NULL,
+    role_id BIGINT NOT NULL,
+    PRIMARY KEY (user_id, role_id),
+    CONSTRAINT fk_user FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE,
+    CONSTRAINT fk_role FOREIGN KEY (role_id) REFERENCES roles (id) ON DELETE CASCADE
+);
+
+-- 4. Initial Seed Data
+INSERT INTO roles (name, created_by) VALUES ('ROLE_USER', 'SYSTEM'), ('ROLE_ADMIN', 'SYSTEM');
