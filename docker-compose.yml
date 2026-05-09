@@ -1,27 +1,50 @@
 services:
   entos-app:
     build: .
+    container_name: entos-backend
+    networks:
+      - entos-network
     ports:
       - "8080:8080"
+      - "5005:5005"
     environment:
       - SPRING_PROFILES_ACTIVE=dev
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/entos_db
-      - SPRING_DATASOURCE_USERNAME=sa
-      - SPRING_DATASOURCE_PASSWORD=password
+      - JAVA_TOOL_OPTIONS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://entos-db:5432/${DB_NAME}
+      - SPRING_DATASOURCE_USERNAME=${DB_USERNAME}
+      - SPRING_DATASOURCE_PASSWORD=${DB_PASSWORD}
+      - ENTOS_OAUTH2_AUTHORIZED-REDIRECT-URI=$${FRONTEND_URL}/oauth2/redirect
+      - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID}
+      - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_GOOGLE_CLIENT_SECRET=${GOOGLE_CLIENT_SECRET}
+      - JWT_SECRET=${JWT_SECRET}
+      - JWT_EXPIRATION=${JWT_EXPIRATION}
     depends_on:
-      postgres:
+      entos-db:
         condition: service_healthy
 
-  postgres:
-    image: postgres:16-alpine
+  entos-db:
+    image: postgres:latest
+    container_name: entos-postgres
+    networks:
+      - entos-network
     environment:
-      - POSTGRES_DB=entos_db
-      - POSTGRES_USER=sa
-      - POSTGRES_PASSWORD=password
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+    volumes:
+      - postgres_data:/var/lib/postgresql
     ports:
       - "5432:5432"
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U entos_user -d entos_db"]
+      # Use the variables so it doesn't fail if you change your .env
+#      test: ["CMD-SHELL", "pg_isready -U $${DB_USERNAME} -d $${DB_NAME}"]
+      test: ["CMD", "pg_isready", "-q", "-d", "${DB_NAME}", "-U", "${DB_USERNAME}"]
       interval: 5s
       timeout: 5s
       retries: 5
+networks:
+  entos-network:
+    driver: bridge
+
+volumes:
+  postgres_data:

@@ -1,6 +1,9 @@
 package com.lr.entos.api.config;
 
 import com.lr.entos.shared.exception.ResourceNotFoundException;
+import com.lr.entos.shared.exception.RoleNotFoundException;
+import com.lr.entos.shared.exception.UserAlreadyExistsException;
+import com.lr.entos.shared.exception.UserNotFoundException;
 import com.lr.entos.shared.response.ApiResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -31,6 +34,53 @@ public class GlobalExceptionHandler {
                 errors
         );
         return new ResponseEntity<>(response,HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(UserNotFoundException.class)
+    public ResponseEntity<ApiResponse<Object>> handleUserNotFoundException(
+            UserNotFoundException ex
+    ){
+        log.warn("UserNotFoundException: {}",ex.getMessage());
+        ApiResponse<Object> response = new ApiResponse<>(
+                "error",
+                HttpStatus.UNAUTHORIZED.value(),
+                ex.getMessage(),
+                LocalDateTime.now(),
+                null
+        );
+        return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
+    }
+
+
+
+    @ExceptionHandler(UserAlreadyExistsException.class)
+    public ResponseEntity<ApiResponse<Object>> handleUserAlreadyExistsException(
+            UserAlreadyExistsException ex
+    ){
+        log.warn("UserAlreadyExistsException: {}",ex.getMessage());
+        ApiResponse<Object> response = new ApiResponse<>(
+                "error",
+                HttpStatus.BAD_REQUEST.value(),
+                ex.getMessage(),
+                LocalDateTime.now(),
+                null
+        );
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(RoleNotFoundException.class)
+    public ResponseEntity<ApiResponse<Object>> handleRoleNotFoundException(
+            RoleNotFoundException ex
+    ){
+        log.warn("RoleNotFoundException: {}",ex.getMessage());
+        ApiResponse<Object> response = new ApiResponse<>(
+                "error",
+                HttpStatus.BAD_REQUEST.value(),
+                ex.getMessage(),
+                LocalDateTime.now(),
+                null
+        );
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(ResourceNotFoundException.class)

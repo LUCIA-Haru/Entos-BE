@@ -1,0 +1,12 @@
+package com.lr.entos.identity.dto.records;
+
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+
+public record SignupRequest(
+        @NotBlank String username,
+        @Email String email,
+        @NotBlank String password
+
+) {
+}

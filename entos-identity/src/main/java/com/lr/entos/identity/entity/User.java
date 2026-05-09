@@ -1,6 +1,6 @@
 package com.lr.entos.identity.entity;
 
-import com.lr.entos.shared.entity.BaseEntity;
+import com.lr.entos.infra.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -35,4 +35,8 @@ public class User extends BaseEntity {
     )
     @Builder.Default // Ensures the set is initialized when using Builder
     private Set<Role> roles = new HashSet<>();
+
+    @Column(nullable = false)
+    @Builder.Default
+    private boolean active = true;
 }

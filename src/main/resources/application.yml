@@ -1,1 +1,22 @@
-spring.application.name=entos-be
+spring:
+  application:
+    name: entos-cafe-platform
+
+  # This is the modern way to activate multiple module files
+  config:
+    import:
+      - classpath:application-identity.yml
+      - classpath:application-api.yml
+      - classpath:application-shared.yml
+      - classpath:application-infra.yml
+      - classpath:application-platform.yml
+      - classpath:application-cafe.yml
+
+  # Optional: Default profiles
+  profiles:
+    active: dev
+
+logging:
+  level:
+    org.springframework.security: DEBUG
+    org.springframework.web: DEBUG

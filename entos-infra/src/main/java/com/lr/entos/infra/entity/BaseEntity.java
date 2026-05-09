@@ -1,4 +1,4 @@
-package com.lr.entos.shared.entity;
+package com.lr.entos.infra.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
@@ -20,7 +20,7 @@ public class BaseEntity {
     private Long id;
 
     @Column(name = "guid", unique = true, nullable = false, updatable = false)
-    private UUID externalId = UUID.randomUUID();
+    private UUID guid = UUID.randomUUID();
 
     @CreatedDate
     @Column(nullable = false, updatable = false)

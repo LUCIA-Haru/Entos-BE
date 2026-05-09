@@ -1,6 +1,6 @@
 package com.lr.entos.identity.entity;
 
-import com.lr.entos.shared.entity.BaseEntity;
+import com.lr.entos.infra.entity.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
@@ -20,7 +20,7 @@ public class Role extends BaseEntity {
     private String name;
     @Column(nullable = false)
     @Builder.Default
-    private Boolean active = true;
+    private boolean status = true;
     @Column(nullable = false)
     private String type;
     private String description;
