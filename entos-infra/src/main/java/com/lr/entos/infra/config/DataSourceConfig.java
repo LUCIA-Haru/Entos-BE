@@ -8,21 +8,19 @@ import org.springframework.context.annotation.Primary;
 
 @Configuration
 public class DataSourceConfig {
+
     @Bean
     @Primary
     public HikariDataSource dataSource(DataSourceProperties properties) {
         String url = properties.getUrl();
 
-        // ⚡ Look for Render's direct raw injection fallback
+        // Priority 1: Read from Render environment variables (DB_URL)
         if (url == null || url.isEmpty() || !url.startsWith("jdbc:")) {
-            String renderUrl = System.getenv("SPRING_DATASOURCE_URL");
-            if (renderUrl != null && !renderUrl.isEmpty()) {
-                url = "jdbc:" + renderUrl;
-            }
+            url = System.getenv("DB_URL");
         }
 
-        // If it still doesn't have jdbc: (e.g. running empty in compilation), force a dummy safe fallback
-        if (url == null || !url.startsWith("jdbc:")) {
+        // Final fallback (for local development)
+        if (url == null || url.isEmpty() || !url.startsWith("jdbc:")) {
             url = "jdbc:postgresql://localhost:5432/entos_db";
         }
 
@@ -34,3 +32,4 @@ public class DataSourceConfig {
         return dataSource;
     }
 }
+
