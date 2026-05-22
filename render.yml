@@ -20,6 +20,8 @@ services:
         sync: false
       - key: OAUTH2_GOOGLE_CLIENT_SECRET
         sync: false
+      - key: PORT
+        value: 8083
 
 databases:
   # 2. The Private Managed PostgreSQL Instance (DEV Environment)
@@ -28,17 +30,3 @@ databases:
     user: entos_admin
     plan: free
     region: singapore
-
-envVars:
-  - key: SPRING_PROFILES_ACTIVE
-    value: dev
-
-  # ⚡ THE SENIOR DEVOPS FIX: Concatenate the prefix cleanly at the infrastructure layer
-  - key: DB_URL
-    value: jdbc:${SPRING_DATASOURCE_URL}
-
-  - key: DB_USERNAME
-    value: ${SPRING_DATASOURCE_USERNAME}
-
-  - key: DB_PASSWORD
-    value: ${SPRING_DATASOURCE_PASSWORD}

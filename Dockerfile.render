@@ -37,4 +37,4 @@ USER entosuser
 # Render maps web traffic dynamically to port 10000 by default
 EXPOSE 8083
 
-ENTRYPOINT ["sh", "-c", "java -jar app.jar --server.port=8083"]
+ENTRYPOINT ["java", "-jar", "app.jar"]
