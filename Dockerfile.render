@@ -1,0 +1,41 @@
+# --- STAGE 1: Build & Package the Multi-Module Monolith ---
+FROM maven:3.9.6-eclipse-temurin-21-jammy AS builder
+WORKDIR /build
+
+# Copy the parent POM and all child module subdirectories
+COPY pom.xml .
+COPY entos-api/pom.xml entos-api/
+COPY entos-identity/pom.xml entos-identity/
+COPY entos-shared/pom.xml entos-shared/
+COPY entos-infra/pom.xml entos-infra/
+
+# Fetch all dependencies to leverage Docker layer caching
+RUN mvn dependency:go-offline -B
+
+# Copy the entire actual source code files
+COPY entos-api/src entos-api/src/
+COPY entos-identity/src entos-identity/src/
+COPY entos-shared/src entos-shared/src/
+COPY entos-infra/src entos-infra/src/
+
+# Package the monolith.
+# Spring Boot Maven Plugin excludes DevTools here via <excludeDevtools> true inside your entos-api pom.xml
+RUN mvn clean package -DskipTests
+
+# --- STAGE 2: Ultra-lightweight Runtime Environment ---
+FROM eclipse-temurin:21-jre-jammy
+WORKDIR /app
+
+# Create a non-root system user for production security hardening
+RUN groupadd -r entosuser && useradd -r -g entosuser entosuser
+
+# Extract only the final executable fat JAR file from the builder stage
+COPY --from=builder /build/entos-api/target/entos-api-*.jar app.jar
+
+RUN chown -R entosuser:entosuser /app
+USER entosuser
+
+# Render maps web traffic dynamically to port 10000 by default
+EXPOSE 10000
+
+ENTRYPOINT ["java", "-jar", "app.jar", "--server.port=10000"]
