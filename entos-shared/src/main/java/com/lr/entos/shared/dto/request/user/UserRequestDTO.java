@@ -1,4 +1,4 @@
-package com.lr.entos.identity.dto.request.user;
+package com.lr.entos.shared.dto.request.user;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -10,5 +10,4 @@ import lombok.NoArgsConstructor;
 public class UserRequestDTO {
     private String username;
     private String email;
-    private Long roleId;
 }

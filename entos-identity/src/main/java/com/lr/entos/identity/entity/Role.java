@@ -20,7 +20,7 @@ public class Role extends BaseEntity {
     private String name;
     @Column(nullable = false)
     @Builder.Default
-    private boolean status = true;
+    private Boolean status = true;
     @Column(nullable = false)
     private String type;
     private String description;

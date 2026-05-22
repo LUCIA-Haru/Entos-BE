@@ -5,14 +5,14 @@ spring:
   # This is the modern way to activate multiple module files
   config:
     import:
-      - classpath:application-identity.yml
-      - classpath:application-api.yml
-      - classpath:application-shared.yml
-      - classpath:application-infra.yml
-      - classpath:application-platform.yml
-      - classpath:application-cafe.yml
+      - "optional:classpath:application-identity.yml"
+      - "optional:classpath:application-api.yml"
+      - "optional:classpath:application-shared.yml"
+      - "optional:classpath:application-infra.yml"
+      - "optional:classpath:application-platform.yml"
+      - "optional:classpath:application-cafe.yml"
 
-  # Optional: Default profiles
+  # Default profile when no profile is explicitly set
   profiles:
     active: dev
 
@@ -20,3 +20,23 @@ logging:
   level:
     org.springframework.security: DEBUG
     org.springframework.web: DEBUG
+
+---
+# --- Development Specific Overrides ---
+spring:
+  config:
+    activate:
+      on-profile: dev
+
+  # ⚡ Added this database block right here inside your dev profile
+  datasource:
+    # Syntax -> ${VARIABLE:fallback_value}
+    # It tries to read Render's cloud DB URL. If it's missing, it falls back to your local machine PostgreSQL!
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/entos_db}
+    driver-class-name: org.postgresql.Driver
+    username: ${SPRING_DATASOURCE_USERNAME:postgres}
+    password: ${SPRING_DATASOURCE_PASSWORD:postgres}
+
+server:
+  # ⚡ Updated this to accept Render's dynamic port variable, falling back to 8081 locally
+  port: ${PORT:8081}

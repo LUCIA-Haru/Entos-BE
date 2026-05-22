@@ -1,9 +1,9 @@
 package com.lr.entos.identity.controller;
 
-import com.lr.entos.identity.dto.records.JwtResponse;
-import com.lr.entos.identity.dto.records.LoginRequest;
-import com.lr.entos.identity.dto.records.SignupRequest;
-import com.lr.entos.identity.dto.response.user.user.UserDTO;
+import com.lr.entos.shared.dto.response.auth.JwtResponse;
+import com.lr.entos.shared.dto.request.auth.LoginRequest;
+import com.lr.entos.shared.dto.request.auth.SignupRequest;
+import com.lr.entos.shared.dto.response.user.UserResponse;
 import com.lr.entos.identity.service.auth.IAuthService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -25,7 +25,7 @@ public class AuthController {
     }
 
     @PostMapping("/signup")
-    public UserDTO signup(@Valid @RequestBody SignupRequest req) {
+    public UserResponse signup(@Valid @RequestBody SignupRequest req) {
        return IAuthService.signup(req);
     }
 }

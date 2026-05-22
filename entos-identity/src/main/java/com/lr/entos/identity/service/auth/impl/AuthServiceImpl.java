@@ -1,11 +1,11 @@
 package com.lr.entos.identity.service.auth.impl;
 
-import com.lr.entos.identity.dto.records.JwtResponse;
-import com.lr.entos.identity.dto.records.LoginRequest;
-import com.lr.entos.identity.dto.records.SignupRequest;
-import com.lr.entos.identity.dto.response.user.user.UserDTO;
+import com.lr.entos.shared.dto.response.auth.JwtResponse;
+import com.lr.entos.shared.dto.request.auth.LoginRequest;
+import com.lr.entos.shared.dto.request.auth.SignupRequest;
+import com.lr.entos.shared.dto.response.user.UserResponse;
 import com.lr.entos.identity.securityConfig.CustomUserDetails;
-import com.lr.entos.identity.securityConfig.JwtUtils;
+import com.lr.entos.infra.utils.JwtUtils;
 import com.lr.entos.identity.service.auth.IAuthService;
 import com.lr.entos.identity.service.user.IUserService;
 import lombok.RequiredArgsConstructor;
@@ -42,14 +42,15 @@ public class AuthServiceImpl implements IAuthService {
         // Prepare your claims
         Map<String, Object> claims = Map.of(
                 "role", details.getAuthorities().iterator().next().getAuthority(),
-                "avatar", "/assets/images/default-avatar.png" // or from DB
+                "avatar", "/assets/images/default-avatar.png", // or from DB
+                "guid",details.guid().toString()
         );
 
         String jwt = jwtUtils.generateToken(details.email(), claims);
-        return new JwtResponse(jwt, details.id(), details.getUsername(), details.email(), roles);
+        return new JwtResponse(jwt, details.guid(), details.getUsername(), details.email(), roles);
     }
 
-    public UserDTO signup(SignupRequest req){
+    public UserResponse signup(SignupRequest req){
 
         return userService.createUser(req);
     }

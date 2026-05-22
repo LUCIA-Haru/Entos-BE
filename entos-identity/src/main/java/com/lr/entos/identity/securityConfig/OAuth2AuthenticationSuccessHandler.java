@@ -1,9 +1,9 @@
 package com.lr.entos.identity.securityConfig;
 
-import com.lr.entos.identity.entity.Role;
 import com.lr.entos.identity.entity.User;
 import com.lr.entos.identity.repository.RoleRepository;
 import com.lr.entos.identity.repository.UserRepository;
+import com.lr.entos.infra.utils.JwtUtils;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -26,7 +26,6 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 
     private final JwtUtils jwtUtils;
     private final UserRepository userRepository;
-    private final RoleRepository roleRepository;
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request,

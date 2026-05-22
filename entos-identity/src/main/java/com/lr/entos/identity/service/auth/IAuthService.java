@@ -1,14 +1,14 @@
 package com.lr.entos.identity.service.auth;
 
 
-import com.lr.entos.identity.dto.records.JwtResponse;
-import com.lr.entos.identity.dto.records.LoginRequest;
-import com.lr.entos.identity.dto.records.SignupRequest;
-import com.lr.entos.identity.dto.response.user.user.UserDTO;
+import com.lr.entos.shared.dto.response.auth.JwtResponse;
+import com.lr.entos.shared.dto.request.auth.LoginRequest;
+import com.lr.entos.shared.dto.request.auth.SignupRequest;
+import com.lr.entos.shared.dto.response.user.UserResponse;
 
 public interface IAuthService {
     JwtResponse login(LoginRequest request);
 
-    UserDTO signup(SignupRequest request);
+    UserResponse signup(SignupRequest request);
 
 }

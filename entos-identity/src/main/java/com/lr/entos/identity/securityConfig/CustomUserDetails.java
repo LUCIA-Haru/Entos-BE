@@ -7,18 +7,19 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
+import java.util.List;
+import java.util.UUID;
 
 public record CustomUserDetails (
-        Long id,
+
+        UUID guid,
         String email,
         @JsonIgnore String password,
         Collection<? extends GrantedAuthority> authorities
 ) implements UserDetails {
     public static CustomUserDetails build(User user){
-        var authorities = user.getRoles().stream()
-                .map(role -> new SimpleGrantedAuthority(role.getName()))
-                .toList();
-        return new CustomUserDetails(user.getId(), user.getEmail(), user.getPassword(), authorities);
+        var authorities = List.of(new SimpleGrantedAuthority(user.getRole().getName()));
+        return new CustomUserDetails(user.getGuid(), user.getEmail(), user.getPassword(), authorities);
     }
 
     @Override

@@ -1,12 +1,11 @@
 package com.lr.entos.identity.securityConfig;
 
-import jakarta.servlet.http.HttpServletResponse;
-import lombok.RequiredArgsConstructor;
+
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.annotation.Order;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -18,6 +17,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.servlet.HandlerExceptionResolver;
 
 @Configuration
 @EnableWebSecurity
@@ -25,23 +25,23 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Slf4j
 @ConfigurationPropertiesScan("com.lr.entos.identity.securityConfig.properties")
 public class SecurityConfig {
+    @Qualifier("handlerExceptionResolver")
+    private final HandlerExceptionResolver resolver;//for accessdeniedexception to be professional so i redirect to globalexception to inject
+
     private final CustomUserDetailsService userDetailsService;
     private final OAuth2AuthenticationSuccessHandler oauth2SuccessHandler;
     private final AuthTokenFilter authenticationJwtTokenFilter;
 
-    public SecurityConfig(CustomUserDetailsService userDetailsService,
+
+    public SecurityConfig(@Qualifier("handlerExceptionResolver") HandlerExceptionResolver resolver, CustomUserDetailsService userDetailsService,
                           OAuth2AuthenticationSuccessHandler oauth2SuccessHandler,
                           AuthTokenFilter authenticationJwtTokenFilter) {
+        this.resolver = resolver;
         this.userDetailsService = userDetailsService;
         this.oauth2SuccessHandler = oauth2SuccessHandler;
         this.authenticationJwtTokenFilter = authenticationJwtTokenFilter;
-        System.out.println(">>> [IDENTITY MODULE] SecurityConfig Bean is being created!");
-    }
-//    @Bean
-//    public AuthTokenFilter authenticationJwtTokenFilter(){
-//        return new AuthTokenFilter();
-//    }
 
+    }
     @Bean
     public DaoAuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider(userDetailsService);
@@ -50,7 +50,7 @@ public class SecurityConfig {
     }
 
     @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig) throws Exception {
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig) {
         return authConfig.getAuthenticationManager();
     }
 
@@ -60,7 +60,7 @@ public class SecurityConfig {
     }
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain filterChain(HttpSecurity http) {
         http
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
@@ -78,9 +78,10 @@ public class SecurityConfig {
                         .anyRequest().authenticated()
                 )
                 .exceptionHandling(exception -> exception
-                        .authenticationEntryPoint((request, response, authException) -> {
-                            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized");
-                        })
+                        .authenticationEntryPoint((request, response, authException) ->
+                                resolver.resolveException(request,response,null,authException))
+                        .accessDeniedHandler((request, response, accessDeniedException) ->
+                                resolver.resolveException(request, response, null, accessDeniedException))
                 )
                 .authenticationProvider(authenticationProvider())
                 .oauth2Login(oauth2 -> oauth2

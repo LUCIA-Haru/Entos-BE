@@ -1,4 +1,4 @@
-package com.lr.entos.identity.securityConfig.properties;
+package com.lr.entos.infra.utils.properties;
 
 import io.jsonwebtoken.Jwt;
 import org.springframework.boot.context.properties.ConfigurationProperties;

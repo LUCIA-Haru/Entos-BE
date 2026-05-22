@@ -38,7 +38,7 @@ public class ApiResponseHandler implements ResponseBodyAdvice<Object> {
             return body;
         }
 
-        String message = getMessage(returnType, request);
+        String message = getMessage(returnType, request,body);
 
         // Handle Spring Data Pagination
         if (body instanceof org.springframework.data.domain.Page<?> page) {
@@ -53,14 +53,14 @@ public class ApiResponseHandler implements ResponseBodyAdvice<Object> {
         return new ApiResponse<>("success", HttpStatus.OK.value(), message, LocalDateTime.now(), body);
     }
 
-    private String getMessage(MethodParameter returnType, ServerHttpRequest request) {
+    private String getMessage(MethodParameter returnType, ServerHttpRequest request,Object body) {
         ResponseMessage ann = returnType.getMethodAnnotation(ResponseMessage.class);
         if (ann != null && !ann.value().isEmpty()) return ann.value();
 
-        return generateDynamicMessage(request);
+        return generateDynamicMessage(request,body);
     }
 
-    private String generateDynamicMessage(ServerHttpRequest request){
+    private String generateDynamicMessage(ServerHttpRequest request, Object body){
         String operation = switch (request.getMethod().toString()){
             case "GET" -> "Fetched";
             case "POST" -> "Created";
@@ -74,11 +74,19 @@ public class ApiResponseHandler implements ResponseBodyAdvice<Object> {
         String entity = "data";
         String[] segments = path.split("/");
 
-        if (segments.length > 1 && StringUtils.hasText(segments[1])){
-            entity = segments[1];
+        // If path is "/api/v1/user", segments array is ["", "api", "v1", "user"]
+        // segments[3] will always point to your target entity name
+        if (segments.length > 3 && StringUtils.hasText(segments[3])) {
+            entity = segments[3];
         }
 
-        entity = toReadablePlural(entity);
+        // Format camelCase spacing smoothly (e.g., "cafePlatform" -> "cafe platform")
+                entity = entity.replaceAll("([a-z])([A-Z])", "$1 $2").toLowerCase();
+
+        // ⚡ Pluralize ONLY when the return body is a Spring Data Pagination Page instance
+        if (body instanceof org.springframework.data.domain.Page<?> && !entity.endsWith("s")) {
+            entity += "s";
+        }
 
         return String.format("%s %s successfully", operation, entity);
     }

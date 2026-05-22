@@ -1,9 +1,17 @@
 package com.lr.entos.identity.service.role;
 
-import com.lr.entos.identity.dto.records.role.RoleRequest;
-import com.lr.entos.identity.entity.Role;
+import com.lr.entos.shared.dto.request.role.RoleDTOs;
+import com.lr.entos.shared.dto.response.role.RoleResponse;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
+import java.util.List;
+import java.util.UUID;
 
 public interface IRoleService {
-    Role createRole(RoleRequest dto);
-    Role updateRole(RoleRequest dto);
+    RoleResponse createRole(RoleDTOs.Create dto);
+    RoleResponse updateRole(UUID guid, RoleDTOs.Update dto);
+    String updateRoleStatus(UUID guid,Boolean delete);
+    Page<RoleResponse> getRoleLists(Pageable pageable);
+
 }

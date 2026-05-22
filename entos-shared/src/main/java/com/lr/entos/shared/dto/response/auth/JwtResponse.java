@@ -1,11 +1,13 @@
-package com.lr.entos.identity.dto.records;
+package com.lr.entos.shared.dto.response.auth;
 
 import java.util.List;
+import java.util.UUID;
+
 import jakarta.validation.constraints.*;
 
 public record JwtResponse(
         @NotBlank String token,
-       @NotNull  Long id,
+       @NotNull UUID guid,
        @NotBlank String username,
        @Email String email,
        @NotEmpty List<String> roles
