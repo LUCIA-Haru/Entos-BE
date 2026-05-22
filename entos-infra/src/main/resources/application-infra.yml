@@ -2,7 +2,7 @@ spring:
   datasource:
     # ⚡ 1. It checks for local DB_URL. If missing, it uses Render's SPRING_DATASOURCE_URL (wrapped with jdbc:).
     # If both are missing, it falls back to your local localhost database!
-    url: ${DB_URL:jdbc:${SPRING_DATASOURCE_URL://localhost:5432/entos_db}}
+    url: ${DB_URL:${SPRING_DATASOURCE_URL_JDBC:jdbc:postgresql://localhost:5432/entos_db}}
 
     # ⚡ 2. It checks for local DB_USERNAME. If missing, it uses Render's admin username, falling back to postgres.
     username: ${DB_USERNAME:${SPRING_DATASOURCE_USERNAME:postgres}}
