@@ -5,7 +5,7 @@ WORKDIR /build
 # 1. Copy the parent POM file
 COPY pom.xml .
 
-# 2. Copy the pom.xml files for ALL child modules (Crucial for dependency resolution)
+# 2. Copy the pom.xml files for ALL child modules
 COPY entos-api/pom.xml entos-api/
 COPY entos-identity/pom.xml entos-identity/
 COPY entos-shared/pom.xml entos-shared/
@@ -14,15 +14,18 @@ COPY entos-cafe/pom.xml entos-cafe/
 COPY entos-social/pom.xml entos-social/
 COPY entos-platform/pom.xml entos-platform/
 
-# Fetch all dependencies to leverage Docker layer caching smoothly
-RUN mvn dependency:go-offline -B
+# ⚡ SENIOR DEVOPS FIX 1: Prevent plugin validation from attempting database connection scans
+RUN mvn dependency:go-offline -B \
+    -Dspring.flyway.enabled=false \
+    -Dspring.autoconfigure.exclude=org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
 
 # 3. Copy everything else in the project folder at once.
-# This brings along whatever src directories exist without crashing on the ones that don't!
 COPY . .
 
-# Package the monolith target binary runner
-RUN mvn clean package -DskipTests
+# ⚡ SENIOR DEVOPS FIX 2: Package without verifying database targets or initializing context pools
+RUN mvn clean package -DskipTests \
+    -Dspring.flyway.enabled=false \
+    -Dspring.autoconfigure.exclude=org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
 
 # --- STAGE 2: Ultra-lightweight Runtime Environment ---
 FROM eclipse-temurin:21-jre-jammy
