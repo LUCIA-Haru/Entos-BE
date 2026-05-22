@@ -14,18 +14,12 @@ COPY entos-cafe/pom.xml entos-cafe/
 COPY entos-social/pom.xml entos-social/
 COPY entos-platform/pom.xml entos-platform/
 
-# ⚡ SENIOR DEVOPS FIX 1: Prevent plugin validation from attempting database connection scans
-RUN mvn dependency:go-offline -B \
-    -Dspring.flyway.enabled=false \
-    -Dspring.autoconfigure.exclude=org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
+RUN mvn dependency:go-offline -B
 
 # 3. Copy everything else in the project folder at once.
 COPY . .
 
-# ⚡ SENIOR DEVOPS FIX 2: Package without verifying database targets or initializing context pools
-RUN mvn clean package -DskipTests \
-    -Dspring.flyway.enabled=false \
-    -Dspring.autoconfigure.exclude=org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
+RUN mvn clean package -DskipTests
 
 # --- STAGE 2: Ultra-lightweight Runtime Environment ---
 FROM eclipse-temurin:21-jre-jammy
@@ -43,4 +37,4 @@ USER entosuser
 # Render maps web traffic dynamically to port 10000 by default
 EXPOSE 8083
 
-ENTRYPOINT ["sh", "-c", "java -jar app.jar --server.port=8083 --spring.datasource.url=jdbc:${SPRING_DATASOURCE_URL}"]
+ENTRYPOINT ["java", "-jar", "app.jar"]
