@@ -2,24 +2,31 @@
 FROM maven:3.9.6-eclipse-temurin-21-jammy AS builder
 WORKDIR /build
 
-# Copy the parent POM and all child module subdirectories
+# 1. Copy the parent POM file
 COPY pom.xml .
+
+# 2. Copy the pom.xml files for ALL child modules (Crucial for dependency resolution!)
 COPY entos-api/pom.xml entos-api/
 COPY entos-identity/pom.xml entos-identity/
 COPY entos-shared/pom.xml entos-shared/
 COPY entos-infra/pom.xml entos-infra/
+COPY entos-cafe/pom.xml entos-cafe/
+COPY entos-social/pom.xml entos-social/
+COPY entos-platform/pom.xml entos-platform/
 
-# Fetch all dependencies to leverage Docker layer caching
+# Fetch all dependencies to leverage Docker layer caching smoothly
 RUN mvn dependency:go-offline -B
 
-# Copy the entire actual source code files
+# 3. Copy the actual source code directories for ALL modules
 COPY entos-api/src entos-api/src/
 COPY entos-identity/src entos-identity/src/
 COPY entos-shared/src entos-shared/src/
 COPY entos-infra/src entos-infra/src/
+COPY entos-cafe/src entos-cafe/src/
+COPY entos-social/src entos-social/src/
+COPY entos-platform/src entos-platform/src/
 
-# Package the monolith.
-# Spring Boot Maven Plugin excludes DevTools here via <excludeDevtools> true inside your entos-api pom.xml
+# Package the monolith target binary runner
 RUN mvn clean package -DskipTests
 
 # --- STAGE 2: Ultra-lightweight Runtime Environment ---
@@ -36,6 +43,6 @@ RUN chown -R entosuser:entosuser /app
 USER entosuser
 
 # Render maps web traffic dynamically to port 10000 by default
-EXPOSE 10000
+EXPOSE 9000
 
 ENTRYPOINT ["java", "-jar", "app.jar", "--server.port=10000"]
