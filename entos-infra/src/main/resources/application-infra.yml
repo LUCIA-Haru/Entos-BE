@@ -1,15 +1,8 @@
 spring:
   datasource:
-    # ⚡ 1. It checks for local DB_URL. If missing, it uses Render's SPRING_DATASOURCE_URL (wrapped with jdbc:).
-    # If both are missing, it falls back to your local localhost database!
-    url: ${DB_URL:${SPRING_DATASOURCE_URL_JDBC:jdbc:postgresql://localhost:5432/entos_db}}
-
-    # ⚡ 2. It checks for local DB_USERNAME. If missing, it uses Render's admin username, falling back to postgres.
-    username: ${DB_USERNAME:${SPRING_DATASOURCE_USERNAME:postgres}}
-
-    # ⚡ 3. It checks for local DB_PASSWORD. If missing, it uses Render's admin password, falling company back to postgres.
-    password: ${DB_PASSWORD:${SPRING_DATASOURCE_PASSWORD:postgres}}
-
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
     driver-class-name: org.postgresql.Driver
 
   jpa:
