@@ -1,5 +1,5 @@
 services:
-  # 1. The Spring Boot Monolith Application Web Service (DEV Environment)
+  # 1. The Spring Boot Monolith Application Web Service
   - type: web
     name: entos-cafe-api-dev
     env: docker
@@ -9,22 +9,33 @@ services:
     region: singapore
     envVars:
       - key: SPRING_PROFILES_ACTIVE
-        value: dev                        # ⚡ Kept as dev for your DEV server!
-      - key: SPRING_DATASOURCE_URL
+        value: dev
+      - key: PORT
+        value: 8083
+
+      # This bypasses the embedded user/password string completely!
+      - key: DB_URL
+        value: jdbc:postgresql://${entos-postgres-db-dev.host}/${entos-postgres-db-dev.databaseName}
+
+      - key: DB_USERNAME
         fromDatabase:
           name: entos-postgres-db-dev
-          property: connectionString
+          property: user
+
+      - key: DB_PASSWORD
+        fromDatabase:
+          name: entos-postgres-db-dev
+          property: password
+
       - key: JWT_SECRET
         sync: false
       - key: OAUTH2_GOOGLE_CLIENT_ID
         sync: false
       - key: OAUTH2_GOOGLE_CLIENT_SECRET
         sync: false
-      - key: PORT
-        value: 8083
 
 databases:
-  # 2. The Private Managed PostgreSQL Instance (DEV Environment)
+  # 2. The Private Managed PostgreSQL Instance
   - name: entos-postgres-db-dev
     databaseName: entos_db_dev
     user: entos_admin
