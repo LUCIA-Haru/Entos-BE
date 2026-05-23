@@ -15,6 +15,13 @@ spring:
   # Default profile when no profile is explicitly set
   profiles:
     active: dev
+    include:
+      - identity
+      - infra
+      - api
+      - shared
+      - cafe
+      - platform
 
   datasource:
     driver-class-name: org.postgresql.Driver
