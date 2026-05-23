@@ -34,7 +34,7 @@ public class SecurityConfig {
 
 
     public SecurityConfig(@Qualifier("handlerExceptionResolver") HandlerExceptionResolver resolver, CustomUserDetailsService userDetailsService,
-                          OAuth2AuthenticationSuccessHandler oauth2SuccessHandler,
+                          @org.springframework.context.annotation.Lazy OAuth2AuthenticationSuccessHandler oauth2SuccessHandler,
                           AuthTokenFilter authenticationJwtTokenFilter) {
         this.resolver = resolver;
         this.userDetailsService = userDetailsService;
