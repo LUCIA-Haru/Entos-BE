@@ -1,6 +1,7 @@
 package com.lr.entos.identity.securityConfig;
 
 
+import com.lr.entos.identity.securityConfig.oauth2.OAuth2AuthenticationSuccessHandler;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
@@ -23,7 +24,8 @@ import org.springframework.web.servlet.HandlerExceptionResolver;
 @EnableWebSecurity
 @EnableMethodSecurity //for @PreAuthorize
 @Slf4j
-@ConfigurationPropertiesScan("com.lr.entos.identity.securityConfig.properties")
+@ConfigurationPropertiesScan({"com.lr.entos.identity.securityConfig.properties",
+        "com.lr.entos.infra.utils.properties"})
 public class SecurityConfig {
     @Qualifier("handlerExceptionResolver")
     private final HandlerExceptionResolver resolver;//for accessdeniedexception to be professional so i redirect to globalexception to inject
