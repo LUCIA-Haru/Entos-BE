@@ -10,9 +10,9 @@ services:
     healthCheckPath: /actuator/health
     envVars:
       - key: SPRING_PROFILES_ACTIVE
-        value: dev
+        value: {"spring":{"profiles":{"active":["dev","identity","infra","api"]}}}
       - key: PORT
-        value: 8083
+        value: prod
 
       # This bypasses the embedded user/password string completely!
       - key: SPRING_DATASOURCE_URL

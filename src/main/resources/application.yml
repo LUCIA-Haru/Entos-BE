@@ -14,7 +14,8 @@ spring:
 
   # Default profile when no profile is explicitly set
   profiles:
-    active: dev,identity,infra,api,shared
+    group:
+      prod: "dev,identity,infra,api"
     include:
       - identity
       - infra
