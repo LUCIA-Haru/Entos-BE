@@ -7,6 +7,7 @@ services:
     dockerContext: .
     plan: free
     region: singapore
+    healthCheckPath: /actuator/health
     envVars:
       - key: SPRING_PROFILES_ACTIVE
         value: dev
@@ -14,18 +15,22 @@ services:
         value: 8083
 
       # This bypasses the embedded user/password string completely!
-#      - key: SPRING_DATASOURCE_URL
-#        value: jdbc:postgresql://${entos-postgres-db-dev.host}:5432/${entos-postgres-db-dev.databaseName}
-#
-#      - key: SPRING_DATASOURCE_USERNAME
-#        fromDatabase:
-#          name: entos-postgres-db-dev
-#          property: user
-#
-#      - key: SPRING_DATASOURCE_PASSWORD
-#        fromDatabase:
-#          name: entos-postgres-db-dev
-#          property: password
+      - key: SPRING_DATASOURCE_URL
+        value: jdbc:postgresql://${DB_INTERNAL_HOST}:5432/entos_db_dev
+      - key: DB_INTERNAL_HOST
+        fromDatabase:
+          name: entos-db-dev
+          property: host
+
+      - key: SPRING_DATASOURCE_USERNAME
+        fromDatabase:
+          name: entos-db-dev
+          property: user
+
+      - key: SPRING_DATASOURCE_PASSWORD
+        fromDatabase:
+          name: entos-db-dev
+          property: password
 
       - key: JWT_SECRET
         sync: false
