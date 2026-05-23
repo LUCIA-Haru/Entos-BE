@@ -16,10 +16,35 @@ spring:
   profiles:
     active: dev
 
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      maximum-pool-size: 10
+      minimum-idle: 5
+      connection-timeout: 60000
+      idle-timeout: 600000
+      max-lifetime: 1800000
+      connection-test-query: SELECT 1
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+        jdbc:
+          lob:
+            non_contextual_creation: true
+    open-in-view: false
+
 logging:
   level:
     org.springframework.security: DEBUG
     org.springframework.web: DEBUG
+    com.zaxxer.hikari: DEBUG
+    org.hibernate.engine.jdbc.env: DEBUG
 
 ---
 # --- Development Specific Overrides ---
