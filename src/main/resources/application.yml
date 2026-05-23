@@ -49,10 +49,5 @@ logging:
     com.zaxxer.hikari: DEBUG
     org.hibernate.engine.jdbc.env: DEBUG
 
----
-# --- Development Specific Overrides ---
-spring:
-  config:
-    activate:
-      on-profile: dev
+
 

@@ -16,4 +16,4 @@ entos:
     expiration-ms: ${JWT_EXPIRATION:3600000}
   oauth2:
     # The frontend landing page that will receive the JWT token
-    authorized-redirect-uri: ${FRONTEND_URL}/oauth2/redirect
+    authorized-redirect-uri: ${FRONTEND_URL:http://localhost:4200}/oauth2/redirect
