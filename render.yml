@@ -19,17 +19,17 @@ services:
         value: jdbc:postgresql://${DB_INTERNAL_HOST}:5432/entos_db_dev
       - key: DB_INTERNAL_HOST
         fromDatabase:
-          name: entos-db-dev
+          name: entos-postgres-db-dev
           property: host
 
       - key: SPRING_DATASOURCE_USERNAME
         fromDatabase:
-          name: entos-db-dev
+          name: entos-postgres-db-dev
           property: user
 
       - key: SPRING_DATASOURCE_PASSWORD
         fromDatabase:
-          name: entos-db-dev
+          name: entos-postgres-db-dev
           property: password
 
       - key: JWT_SECRET
