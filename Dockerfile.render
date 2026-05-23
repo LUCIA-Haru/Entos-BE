@@ -19,7 +19,7 @@ RUN mvn dependency:go-offline -B
 # 3. Copy everything else in the project folder at once.
 COPY . .
 
-RUN mvn clean package -DskipTests
+RUN mvn clean install -DskipTests
 
 # --- STAGE 2: Ultra-lightweight Runtime Environment ---
 FROM eclipse-temurin:21-jre-jammy
