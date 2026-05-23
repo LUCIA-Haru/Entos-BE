@@ -39,6 +39,9 @@ spring:
             non_contextual_creation: true
     open-in-view: false
 
+server:
+  port: ${PORT:8083}
+
 logging:
   level:
     org.springframework.security: DEBUG
@@ -53,5 +56,3 @@ spring:
     activate:
       on-profile: dev
 
-server:
-  port: ${PORT:8083}
