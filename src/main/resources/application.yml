@@ -14,7 +14,7 @@ spring:
 
   # Default profile when no profile is explicitly set
   profiles:
-    active: dev
+    active: dev,identity,infra,api,shared
     include:
       - identity
       - infra
@@ -47,7 +47,7 @@ spring:
     open-in-view: false
 
 server:
-  port: ${PORT:8083}
+  port: 8083
 
 logging:
   level:
