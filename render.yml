@@ -15,7 +15,7 @@ services:
 
       # This bypasses the embedded user/password string completely!
       - key: SPRING_DATASOURCE_URL
-        value: jdbc:postgresql://${entos-postgres-db-dev.host}/${entos-postgres-db-dev.databaseName}
+        value: jdbc:postgresql://${entos-postgres-db-dev.host}:5432/${entos-postgres-db-dev.databaseName}
 
       - key: SPRING_DATASOURCE_USERNAME
         fromDatabase:
