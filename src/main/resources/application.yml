@@ -32,7 +32,6 @@ spring:
       connection-timeout: 60000
       idle-timeout: 600000
       max-lifetime: 1800000
-      connection-test-query: SELECT 1
 
   jpa:
     hibernate:
@@ -47,8 +46,6 @@ spring:
             non_contextual_creation: true
     open-in-view: false
 
-server:
-  port: 8083
 
 logging:
   level:

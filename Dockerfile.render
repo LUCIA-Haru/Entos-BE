@@ -35,6 +35,6 @@ RUN chown -R entosuser:entosuser /app
 USER entosuser
 
 # Render maps web traffic dynamically to port 10000 by default
-EXPOSE 8083
+EXPOSE 10000
 
 ENTRYPOINT ["java", "-jar", "app.jar"]
