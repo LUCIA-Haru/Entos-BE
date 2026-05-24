@@ -7,10 +7,10 @@ services:
     dockerContext: .
     plan: free
     region: singapore
-    healthCheckPath: /actuator/health
+    healthCheckPath: /api/actuator/health
     envVars:
-      - key: SPRING_PROFILES_ACTIVE
-        value: prod
+      - key: PORT
+        value: 10000
 
       # This bypasses the embedded user/password string completely!
       - key: SPRING_DATASOURCE_URL

@@ -12,17 +12,6 @@ spring:
       - "optional:classpath:application-platform.yml"
       - "optional:classpath:application-cafe.yml"
 
-  # Default profile when no profile is explicitly set
-  profiles:
-    group:
-      prod: "dev,identity,infra,api"
-    include:
-      - identity
-      - infra
-      - api
-      - shared
-      - cafe
-      - platform
 
   datasource:
     driver-class-name: org.postgresql.Driver
