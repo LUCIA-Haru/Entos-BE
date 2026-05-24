@@ -11,27 +11,27 @@ services:
     envVars:
       - key: PORT
         value: 10000
-
-      # This bypasses the embedded user/password string completely!
-      - key: SPRING_DATASOURCE_URL
-        fromDatabase:
-          name: entos-postgres-db-dev
-          property: connectionString
-
-      - key: DB_INTERNAL_HOST
-        fromDatabase:
-          name: entos-postgres-db-dev
-          property: host
-
-      - key: SPRING_DATASOURCE_USERNAME
-        fromDatabase:
-          name: entos-postgres-db-dev
-          property: user
-
-      - key: SPRING_DATASOURCE_PASSWORD
-        fromDatabase:
-          name: entos-postgres-db-dev
-          property: password
+#
+#      # This bypasses the embedded user/password string completely!
+#      - key: SPRING_DATASOURCE_URL
+#        fromDatabase:
+#          name: entos-postgres-db-dev
+#          property: connectionString
+#
+#      - key: DB_INTERNAL_HOST
+#        fromDatabase:
+#          name: entos-postgres-db-dev
+#          property: host
+#
+#      - key: SPRING_DATASOURCE_USERNAME
+#        fromDatabase:
+#          name: entos-postgres-db-dev
+#          property: user
+#
+#      - key: SPRING_DATASOURCE_PASSWORD
+#        fromDatabase:
+#          name: entos-postgres-db-dev
+#          property: password
 
       - key: JWT_SECRET
         sync: false
