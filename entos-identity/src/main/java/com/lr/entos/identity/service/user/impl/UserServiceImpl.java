@@ -83,10 +83,10 @@ public class UserServiceImpl implements IUserService {
 
     @Override
     public UserResponse createUser(SignupRequest req) {
-        String userRole = "User";
+        String userRole = Commons.USER;
 
         if (userRepository.existsByEmail(req.email()) || userRepository.existsByUsername(req.username()))
-            throw new UserAlreadyExistsException(ErrorsMessageUtils.ALREADY_EXIST.formatted("User" , req.email() +"||" + req.username()));
+            throw new UserAlreadyExistsException(ErrorsMessageUtils.ALREADY_EXIST.formatted(Commons.USER , req.email() +"||" + req.username()));
 
         Role role = roleRepository.findByName(userRole).orElseThrow(() ->
                 new RoleNotFoundException(ErrorsMessageUtils.NOT_FOUND.formatted("Role")));

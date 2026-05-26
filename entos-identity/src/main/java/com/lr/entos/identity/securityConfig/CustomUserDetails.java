@@ -15,11 +15,12 @@ public record CustomUserDetails (
         UUID guid,
         String email,
         @JsonIgnore String password,
+        String avatarUrl,
         Collection<? extends GrantedAuthority> authorities
 ) implements UserDetails {
     public static CustomUserDetails build(User user){
         var authorities = List.of(new SimpleGrantedAuthority(user.getRole().getName()));
-        return new CustomUserDetails(user.getGuid(), user.getEmail(), user.getPassword(), authorities);
+        return new CustomUserDetails(user.getGuid(), user.getEmail(), user.getPassword(),user.getAvatarUrl() ,authorities);
     }
 
     @Override

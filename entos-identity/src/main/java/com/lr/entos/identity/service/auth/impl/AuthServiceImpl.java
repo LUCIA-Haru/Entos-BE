@@ -8,6 +8,7 @@ import com.lr.entos.identity.securityConfig.CustomUserDetails;
 import com.lr.entos.infra.utils.JwtUtils;
 import com.lr.entos.identity.service.auth.IAuthService;
 import com.lr.entos.identity.service.user.IUserService;
+import com.lr.entos.shared.utils.constants.Commons;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -35,19 +36,24 @@ public class AuthServiceImpl implements IAuthService {
 
         CustomUserDetails details = (CustomUserDetails) auth.getPrincipal();
 
-        List<String> roles = details.getAuthorities().stream()
+        String role = details.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
-                .toList();
+                .findFirst()
+                .orElse(Commons.USER);
+
+        String avatarURL = (details.avatarUrl() != null && !details.avatarUrl().isBlank())
+                ? details.avatarUrl()
+                : "/assets/images/default-avatar.png";
 
         // Prepare your claims
         Map<String, Object> claims = Map.of(
-                "role", details.getAuthorities().iterator().next().getAuthority(),
-                "avatar", "/assets/images/default-avatar.png", // or from DB
+                "role", role,
+                "avatar", avatarURL,
                 "guid",details.guid().toString()
         );
 
         String jwt = jwtUtils.generateToken(details.email(), claims);
-        return new JwtResponse(jwt, details.guid(), details.getUsername(), details.email(), roles);
+        return new JwtResponse(jwt, details.guid(), details.getUsername(), details.email(), role);
     }
 
     public UserResponse signup(SignupRequest req){

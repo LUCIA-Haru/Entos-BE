@@ -10,6 +10,6 @@ public record JwtResponse(
        @NotNull UUID guid,
        @NotBlank String username,
        @Email String email,
-       @NotEmpty List<String> roles
+       @NotEmpty String role
 ) {
 }
